@@ -1,2 +1,5 @@
 vendor/
 *.swp
+GPATH
+GRTAGS
+GTAGS
