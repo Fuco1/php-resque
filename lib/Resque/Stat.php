@@ -1,4 +1,5 @@
 <?php
+use Resque\Resque;
 /**
  * Resque statistic management (jobs processed, failed, etc)
  *

@@ -1,4 +1,5 @@
 <?php
+use Resque\Resque;
 /**
  * Status tracker/information for a job.
  *

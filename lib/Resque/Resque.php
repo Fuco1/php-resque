@@ -1,4 +1,5 @@
 <?php
+namespace Resque;
 /**
  * Base Resque class.
  *
@@ -59,7 +60,7 @@ class Resque
         if (is_callable(self::$redisServer)) {
             self::$redis = call_user_func(self::$redisServer, self::$redisDatabase);
         } else {
-            self::$redis = new Resque_Redis(self::$redisServer, self::$redisDatabase);
+            self::$redis = new \Resque_Redis(self::$redisServer, self::$redisDatabase);
         }
 
         return self::$redis;
@@ -86,7 +87,7 @@ class Resque
 
         $pid = pcntl_fork();
         if($pid === -1) {
-            throw new RuntimeException('Unable to fork child worker.');
+            throw new \RuntimeException('Unable to fork child worker.');
         }
 
         return $pid;
@@ -222,14 +223,14 @@ class Resque
             'id'    => $id,
         );
         try {
-            Resque_Event::trigger('beforeEnqueue', $hookParams);
+            \Resque_Event::trigger('beforeEnqueue', $hookParams);
         }
-        catch(Resque_Job_DontCreate $e) {
+        catch(\Resque_Job_DontCreate $e) {
             return false;
         }
 
-        Resque_Job::create($queue, $class, $args, $trackStatus, $id);
-        Resque_Event::trigger('afterEnqueue', $hookParams);
+        \Resque_Job::create($queue, $class, $args, $trackStatus, $id);
+        \Resque_Event::trigger('afterEnqueue', $hookParams);
 
         return $id;
     }
@@ -242,7 +243,7 @@ class Resque
      */
     public static function reserve($queue)
     {
-        return Resque_Job::reserve($queue);
+        return \Resque_Job::reserve($queue);
     }
 
     /**

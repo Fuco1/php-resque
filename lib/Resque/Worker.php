@@ -1,4 +1,5 @@
 <?php
+use Resque\Resque;
 /**
  * Resque worker that handles checking queues for jobs, fetching them
  * off the queues, running them and handling the result.

@@ -1,4 +1,5 @@
 <?php
+use Resque\Resque;
 /**
  * Redis backend for storing failed Resque jobs.
  *
