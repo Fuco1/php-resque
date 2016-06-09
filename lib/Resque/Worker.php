@@ -1,5 +1,6 @@
 <?php
 use Resque\Resque;
+use Resque\Event;
 /**
  * Resque worker that handles checking queues for jobs, fetching them
  * off the queues, running them and handling the result.
@@ -193,7 +194,7 @@ class Resque_Worker
             }
 
             $this->logger->log(Psr\Log\LogLevel::NOTICE, 'Starting work on {job}', array('job' => $job));
-            Resque_Event::trigger('beforeFork', $job);
+            Event::trigger('beforeFork', $job);
             $this->workingOn($job);
 
             $this->child = Resque::fork();
@@ -240,7 +241,7 @@ class Resque_Worker
     public function perform(Resque_Job $job)
     {
         try {
-            Resque_Event::trigger('afterFork', $job);
+            Event::trigger('afterFork', $job);
             $job->perform();
         }
         catch(Exception $e) {
@@ -314,7 +315,7 @@ class Resque_Worker
     {
         $this->registerSigHandlers();
         $this->pruneDeadWorkers();
-        Resque_Event::trigger('beforeFirstFork', $this);
+        Event::trigger('beforeFirstFork', $this);
         $this->registerWorker();
     }
 

@@ -1,5 +1,6 @@
 <?php
 use Resque\Resque;
+use Resque\Event;
 /**
  * Resque job.
  *
@@ -193,7 +194,7 @@ class Resque_Job
     public function perform()
     {
         try {
-            Resque_Event::trigger('beforePerform', $this);
+            Event::trigger('beforePerform', $this);
 
             $instance = $this->getInstance();
             if(method_exists($instance, 'setUp')) {
@@ -206,7 +207,7 @@ class Resque_Job
                 $instance->tearDown();
             }
 
-            Resque_Event::trigger('afterPerform', $this);
+            Event::trigger('afterPerform', $this);
         }
         // beforePerform/setUp have said don't perform this job. Return.
         catch(Resque_Job_DontPerform $e) {
@@ -223,7 +224,7 @@ class Resque_Job
      */
     public function fail($exception)
     {
-        Resque_Event::trigger('onFailure', array(
+        Event::trigger('onFailure', array(
             'exception' => $exception,
             'job' => $this,
         ));

@@ -223,14 +223,14 @@ class Resque
             'id'    => $id,
         );
         try {
-            \Resque_Event::trigger('beforeEnqueue', $hookParams);
+            Event::trigger('beforeEnqueue', $hookParams);
         }
         catch(\Resque_Job_DontCreate $e) {
             return false;
         }
 
         \Resque_Job::create($queue, $class, $args, $trackStatus, $id);
-        \Resque_Event::trigger('afterEnqueue', $hookParams);
+        Event::trigger('afterEnqueue', $hookParams);
 
         return $id;
     }

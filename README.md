@@ -55,7 +55,7 @@ If you're not familiar with Composer, please see <http://getcomposer.org/>.
 {
     // ...
     "require": {
-        "chrisboulton/php-resque": "1.2.x"	// Most recent tagged version
+        "chrisboulton/php-resque": "1.2.x"  // Most recent tagged version
     },
     // ...
 }
@@ -334,12 +334,12 @@ automatically detect and use it.
 php-resque has a basic event system that can be used by your application
 to customize how some of the php-resque internals behave.
 
-You listen in on events (as listed below) by registering with `Resque_Event`
+You listen in on events (as listed below) by registering with `Event`
 and supplying a callback that you would like triggered when the event is
 raised:
 
 ```sh
-Resque_Event::listen('eventName', [callback]);
+Event::listen('eventName', [callback]);
 ```
 
 `[callback]` may be anything in PHP that is callable by `call_user_func_array`:
@@ -352,12 +352,12 @@ Resque_Event::listen('eventName', [callback]);
 Events may pass arguments (documented below), so your callback should accept
 these arguments.
 
-You can stop listening to an event by calling `Resque_Event::stopListening`
-with the same arguments supplied to `Resque_Event::listen`.
+You can stop listening to an event by calling `Event::stopListening`
+with the same arguments supplied to `Event::listen`.
 
 It is up to your application to register event listeners. When enqueuing events
 in your application, it should be as easy as making sure php-resque is loaded
-and calling `Resque_Event::listen`.
+and calling `Event::listen`.
 
 When running workers, if you run workers via the default `bin/resque` script,
 your `APP_INCLUDE` script should initialize and register any listeners required
@@ -437,7 +437,7 @@ Called after a job has been queued using the `Resque::enqueue` method. Arguments
 
 ## Step-By-Step ##
 
-For a more in-depth look at what php-resque does under the hood (without 
+For a more in-depth look at what php-resque does under the hood (without
 needing to directly examine the code), have a look at `HOWITWORKS.md`.
 
 ## Contributors ##
