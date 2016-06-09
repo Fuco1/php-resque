@@ -88,13 +88,13 @@ How do the workers process the queues?
            a `Resque_Job_DirtyExitException` as its only argument.
         3. `Resque_Job->fail()` triggers an `onFailure` event
         4. `Resque_Job->fail()` updates the job status from `RUNNING` to `FAILED`
-        5. `Resque_Job->fail()` calls `Resque_Failure::create()` with the job
+        5. `Resque_Job->fail()` calls `Failure::create()` with the job
            payload, the `Resque_Job_DirtyExitException`, the internal ID of the
            worker, and the queue name as arguments
-        6. `Resque_Failure::create()` creates a new object of whatever type has
-           been set as the `Resque_Failure` "backend" handler; by default, this is
-           a `Resque_Failure_Redis` object, whose constructor simply collects the
-           data passed into `Resque_Failure::create()` and pushes it into Redis
+        6. `Failure::create()` creates a new object of whatever type has
+           been set as the `Failure` "backend" handler; by default, this is
+           a `Failure_Redis` object, whose constructor simply collects the
+           data passed into `Failure::create()` and pushes it into Redis
            in the `failed` queue
         7. `Resque_Job->fail()` increments two failure counters in Redis: one for
            a total count, and one for the worker

@@ -1,4 +1,5 @@
 <?php
+namespace Resque;
 /**
  * Failed Resque job.
  *
@@ -6,7 +7,7 @@
  * @author      Chris Boulton <chris@bigcommerce.com>
  * @license     http://www.opensource.org/licenses/mit-license.php
  */
-class Resque_Failure
+class Failure
 {
     /**
      * @var string Class name representing the backend to pass failed jobs off to.
@@ -21,7 +22,7 @@ class Resque_Failure
      * @param \Resque_Worker $worker Instance of Resque_Worker that was running this job when it failed.
      * @param string $queue          The name of the queue that this job was fetched from.
      */
-    public static function create($payload, Exception $exception, Resque_Worker $worker, $queue)
+    public static function create($payload, \Exception $exception, \Resque_Worker $worker, $queue)
     {
         $backend = self::getBackend();
         new $backend($payload, $exception, $worker, $queue);
@@ -35,7 +36,7 @@ class Resque_Failure
     public static function getBackend()
     {
         if(self::$backend === null) {
-            self::$backend = 'Resque_Failure_Redis';
+            self::$backend = '\Resque_Failure_Redis';
         }
 
         return self::$backend;
