@@ -1,6 +1,7 @@
 <?php
 use Resque\Resque;
 use Resque\Event;
+use Resque\Job;
 /**
  * Resque worker that handles checking queues for jobs, fetching them
  * off the queues, running them and handling the result.
@@ -42,7 +43,7 @@ class Resque_Worker
     private $id;
 
     /**
-     * @var Resque_Job Current job, if any, being processed by this worker.
+     * @var Resque\Job Current job, if any, being processed by this worker.
      */
     private $currentJob = null;
 
@@ -236,9 +237,9 @@ class Resque_Worker
     /**
      * Process a single job.
      *
-     * @param Resque_Job $job The job to be processed.
+     * @param Resque\Job $job The job to be processed.
      */
-    public function perform(Resque_Job $job)
+    public function perform(Job $job)
     {
         try {
             Event::trigger('afterFork', $job);
@@ -257,7 +258,7 @@ class Resque_Worker
     /**
      * @param  bool            $blocking
      * @param  int             $timeout
-     * @return object|boolean               Instance of Resque_Job if a job is found, false if not.
+     * @return object|boolean               Instance of Resque\Job if a job is found, false if not.
      */
     public function reserve($blocking = false, $timeout = null)
     {
@@ -267,7 +268,7 @@ class Resque_Worker
         }
 
         if($blocking === true) {
-            $job = Resque_Job::reserveBlocking($queues, $timeout);
+            $job = Job::reserveBlocking($queues, $timeout);
             if($job) {
                 $this->logger->log(Psr\Log\LogLevel::INFO, 'Found job on {queue}', array('queue' => $job->queue));
                 return $job;
@@ -275,7 +276,7 @@ class Resque_Worker
         } else {
             foreach($queues as $queue) {
                 $this->logger->log(Psr\Log\LogLevel::INFO, 'Checking {queue} for jobs', array('queue' => $queue));
-                $job = Resque_Job::reserve($queue);
+                $job = Job::reserve($queue);
                 if($job) {
                     $this->logger->log(Psr\Log\LogLevel::INFO, 'Found job on {queue}', array('queue' => $job->queue));
                     return $job;
@@ -492,9 +493,9 @@ class Resque_Worker
     /**
      * Tell Redis which job we're currently working on.
      *
-     * @param object $job Resque_Job instance containing the job we're working on.
+     * @param object $job Resque\Job instance containing the job we're working on.
      */
-    public function workingOn(Resque_Job $job)
+    public function workingOn(Job $job)
     {
         $job->worker = $this;
         $this->currentJob = $job;

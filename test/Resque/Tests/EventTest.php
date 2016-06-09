@@ -1,6 +1,7 @@
 <?php
 use Resque\Resque;
 use Resque\Event;
+use Resque\Job;
 /**
  * Event tests.
  *
@@ -36,7 +37,7 @@ class Resque_Tests_EventTest extends Resque_Tests_TestCase
                 'somevar',
             ),
         );
-        $job = new Resque_Job('jobs', $payload);
+        $job = new Job('jobs', $payload);
         $job->worker = $this->worker;
         return $job;
     }
@@ -158,8 +159,8 @@ class Resque_Tests_EventTest extends Resque_Tests_TestCase
     public function assertValidEventCallback($function, $job)
     {
         $this->callbacksHit[] = $function;
-        if (!$job instanceof Resque_Job) {
-            $this->fail('Callback job argument is not an instance of Resque_Job');
+        if (!$job instanceof Job) {
+            $this->fail('Callback job argument is not an instance of Resque\Job');
         }
         $args = $job->getArguments();
         $this->assertEquals($args[0], 'somevar');

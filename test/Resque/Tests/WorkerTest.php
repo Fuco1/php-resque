@@ -1,5 +1,6 @@
 <?php
 use Resque\Resque;
+use Resque\Job;
 /**
  * Resque_Worker tests.
  *
@@ -174,7 +175,7 @@ class Resque_Tests_WorkerTest extends Resque_Tests_TestCase
         $payload = array(
             'class' => 'Test_Job'
         );
-        $job = new Resque_Job('jobs', $payload);
+        $job = new Job('jobs', $payload);
         $worker->workingOn($job);
 
         $job = $worker->job();
@@ -260,7 +261,7 @@ class Resque_Tests_WorkerTest extends Resque_Tests_TestCase
         $payload = array(
             'class' => 'Test_Job'
         );
-        $job = new Resque_Job('jobs', $payload);
+        $job = new Job('jobs', $payload);
 
         $worker->workingOn($job);
         $worker->unregisterWorker();

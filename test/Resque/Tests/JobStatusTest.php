@@ -1,5 +1,6 @@
 <?php
 use Resque\Resque;
+use Resque\Job;
 /**
  * Resque_Job_Status tests.
  *
@@ -33,7 +34,7 @@ class Resque_Tests_JobStatusTest extends Resque_Tests_TestCase
     public function testJobStatusIsReturnedViaJobInstance()
     {
         $token = Resque::enqueue('jobs', 'Test_Job', null, true);
-        $job = Resque_Job::reserve('jobs');
+        $job = Job::reserve('jobs');
         $this->assertEquals(Resque_Job_Status::STATUS_WAITING, $job->getStatus());
     }
 
@@ -101,7 +102,7 @@ class Resque_Tests_JobStatusTest extends Resque_Tests_TestCase
         $this->assertNotEquals($originalToken, $newToken);
 
         // Now check the status of the new job
-        $newJob = Resque_Job::reserve('jobs');
+        $newJob = Job::reserve('jobs');
         $this->assertEquals(Resque_Job_Status::STATUS_WAITING, $newJob->getStatus());
     }
 }

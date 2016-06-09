@@ -34,11 +34,11 @@
         "bin/resque"
     ],
     "autoload": {
-        "psr-0": {
-            "Resque": "lib"
-        },
         "psr-4": {
             "Resque\\": "lib/Resque"
+        },
+        "psr-0": {
+            "Resque": "lib"
         }
     }
 }

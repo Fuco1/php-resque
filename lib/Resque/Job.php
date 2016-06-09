@@ -1,8 +1,6 @@
 <?php
-use Resque\Resque;
-use Resque\Event;
-use Resque\Exception;
-use Resque\Failure;
+namespace Resque;
+
 /**
  * Resque job.
  *
@@ -10,7 +8,7 @@ use Resque\Failure;
  * @author      Chris Boulton <chris@bigcommerce.com>
  * @license         http://www.opensource.org/licenses/mit-license.php
  */
-class Resque_Job
+class Job
 {
     /**
      * @var string The name of the queue that this job belongs to.
@@ -62,7 +60,7 @@ class Resque_Job
         }
 
         if($args !== null && !is_array($args)) {
-            throw new InvalidArgumentException(
+            throw new \InvalidArgumentException(
                 'Supplied $args must be an array.'
             );
         }
@@ -74,7 +72,7 @@ class Resque_Job
         ));
 
         if($monitor) {
-            Resque_Job_Status::create($id);
+            \Resque_Job_Status::create($id);
         }
 
         return $id;
@@ -82,10 +80,10 @@ class Resque_Job
 
     /**
      * Find the next available job from the specified queue and return an
-     * instance of Resque_Job for it.
+     * instance of Resque\Job for it.
      *
      * @param string $queue The name of the queue to check for a job in.
-     * @return null|object Null when there aren't any waiting jobs, instance of Resque_Job when a job was found.
+     * @return null|object Null when there aren't any waiting jobs, instance of Resque\Job when a job was found.
      */
     public static function reserve($queue)
     {
@@ -94,16 +92,16 @@ class Resque_Job
             return false;
         }
 
-        return new Resque_Job($queue, $payload);
+        return new Job($queue, $payload);
     }
 
     /**
      * Find the next available job from the specified queues using blocking list pop
-     * and return an instance of Resque_Job for it.
+     * and return an instance of Resque\Job for it.
      *
      * @param array             $queues
      * @param int               $timeout
-     * @return null|object Null when there aren't any waiting jobs, instance of Resque_Job when a job was found.
+     * @return null|object Null when there aren't any waiting jobs, instance of Resque\Job when a job was found.
      */
     public static function reserveBlocking(array $queues, $timeout = null)
     {
@@ -113,7 +111,7 @@ class Resque_Job
             return false;
         }
 
-        return new Resque_Job($item['queue'], $item['payload']);
+        return new Job($item['queue'], $item['payload']);
     }
 
     /**
@@ -127,7 +125,7 @@ class Resque_Job
             return;
         }
 
-        $statusInstance = new Resque_Job_Status($this->payload['id']);
+        $statusInstance = new \Resque_Job_Status($this->payload['id']);
         $statusInstance->update($status);
     }
 
@@ -138,7 +136,7 @@ class Resque_Job
      */
     public function getStatus()
     {
-        $status = new Resque_Job_Status($this->payload['id']);
+        $status = new \Resque_Job_Status($this->payload['id']);
         return $status->get();
     }
 
@@ -212,7 +210,7 @@ class Resque_Job
             Event::trigger('afterPerform', $this);
         }
         // beforePerform/setUp have said don't perform this job. Return.
-        catch(Resque_Job_DontPerform $e) {
+        catch(\Resque_Job_DontPerform $e) {
             return false;
         }
 
@@ -231,15 +229,15 @@ class Resque_Job
             'job' => $this,
         ));
 
-        $this->updateStatus(Resque_Job_Status::STATUS_FAILED);
+        $this->updateStatus(\Resque_Job_Status::STATUS_FAILED);
         Failure::create(
             $this->payload,
             $exception,
             $this->worker,
             $this->queue
         );
-        Resque_Stat::incr('failed');
-        Resque_Stat::incr('failed:' . $this->worker);
+        \Resque_Stat::incr('failed');
+        \Resque_Stat::incr('failed:' . $this->worker);
     }
 
     /**
@@ -248,7 +246,7 @@ class Resque_Job
      */
     public function recreate()
     {
-        $status = new Resque_Job_Status($this->payload['id']);
+        $status = new \Resque_Job_Status($this->payload['id']);
         $monitor = false;
         if($status->isTracking()) {
             $monitor = true;
