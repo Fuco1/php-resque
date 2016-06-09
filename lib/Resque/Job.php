@@ -1,6 +1,7 @@
 <?php
 use Resque\Resque;
 use Resque\Event;
+use Resque\Exception;
 /**
  * Resque job.
  *
@@ -166,13 +167,13 @@ class Resque_Job
         }
 
         if(!class_exists($this->payload['class'])) {
-            throw new Resque_Exception(
+            throw new Exception(
                 'Could not find job class ' . $this->payload['class'] . '.'
             );
         }
 
         if(!method_exists($this->payload['class'], 'perform')) {
-            throw new Resque_Exception(
+            throw new Exception(
                 'Job class ' . $this->payload['class'] . ' does not contain a perform method.'
             );
         }
@@ -189,7 +190,7 @@ class Resque_Job
      * associated with the job with the supplied arguments.
      *
      * @return bool
-     * @throws Resque_Exception When the job's class could not be found or it does not contain a perform method.
+     * @throws Exception When the job's class could not be found or it does not contain a perform method.
      */
     public function perform()
     {

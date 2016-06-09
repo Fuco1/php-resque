@@ -1,5 +1,6 @@
 <?php
 use Resque\Resque;
+use Resque\Exception;
 /**
  * Resque_Job tests.
  *
@@ -116,7 +117,7 @@ class Resque_Tests_JobTest extends Resque_Tests_TestCase
     }
 
     /**
-     * @expectedException Resque_Exception
+     * @expectedException Exception
      */
     public function testJobWithoutPerformMethodThrowsException()
     {
@@ -127,7 +128,7 @@ class Resque_Tests_JobTest extends Resque_Tests_TestCase
     }
 
     /**
-     * @expectedException Resque_Exception
+     * @expectedException Exception
      */
     public function testInvalidJobThrowsException()
     {
