@@ -31,7 +31,7 @@ Changes by iskandar introduce improved support for using DSNs to connect to Redi
 * Restructure tests and test bootstrapping. Autoload tests via Composer (install test dependencies with `composer install --dev`)
 * Add `SETEX` to list of commands which supply a key as the first argument in Redisent (danhunsaker)
 * Fix an issue where a lost connection to Redis could cause an infinite loop (atorres757)
-* Add a helper method to `Resque_Redis` to remove the namespace applied to Redis keys (tonypiper)
+* Add a helper method to `Resque\Redis` to remove the namespace applied to Redis keys (tonypiper)
 * Call beforePerform hook before retrieivng an instance of the job class (allows beforePerform to cancel a job with DontPerform before initialising your application)
 * Add `beforeEnqueue` hook, called before a job is placed on a queue
 

@@ -3,6 +3,7 @@ use Resque\Resque;
 use Resque\Exception;
 use Resque\Job;
 use Resque\Log;
+use Resque\Redis;
 /**
  * Resque\Job tests.
  *
@@ -179,14 +180,14 @@ class Resque_Tests_JobTest extends Resque_Tests_TestCase
         );
 
         foreach($fixture as $item) {
-            Resque_Redis::prefix($item['test']);
-            $this->assertEquals(Resque_Redis::getPrefix(), $item['assertValue']);
+            Redis::prefix($item['test']);
+            $this->assertEquals(Redis::getPrefix(), $item['assertValue']);
         }
     }
 
     public function testJobWithNamespace()
     {
-        Resque_Redis::prefix('php');
+        Redis::prefix('php');
         $queue = 'jobs';
         $payload = array('another_value');
         Resque::enqueue($queue, 'Test_Job_With_TearDown', $payload);
@@ -194,7 +195,7 @@ class Resque_Tests_JobTest extends Resque_Tests_TestCase
         $this->assertEquals(Resque::queues(), array('jobs'));
         $this->assertEquals(Resque::size($queue), 1);
 
-        Resque_Redis::prefix('resque');
+        Redis::prefix('resque');
         $this->assertEquals(Resque::size($queue), 0);
     }
 

@@ -90,7 +90,7 @@ if(!empty($COUNT) && $COUNT > 1) {
 $PREFIX = getenv('PREFIX');
 if(!empty($PREFIX)) {
     $logger->log(Psr\Log\LogLevel::INFO, 'Prefix set to {prefix}', array('prefix' => $PREFIX));
-    Resque_Redis::prefix($PREFIX);
+    \Resque\Redis::prefix($PREFIX);
 }
 
 if($count > 1) {

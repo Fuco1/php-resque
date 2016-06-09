@@ -1,4 +1,5 @@
 <?php
+namespace Resque;
 /**
  * Wrap Credis to add namespace support and various helper methods.
  *
@@ -6,7 +7,7 @@
  * @author      Chris Boulton <chris@bigcommerce.com>
  * @license     http://www.opensource.org/licenses/mit-license.php
  */
-class Resque_Redis
+class Redis
 {
     /**
      * Redis namespace
@@ -112,18 +113,18 @@ class Resque_Redis
     public function __construct($server, $database = null)
     {
         if (is_array($server)) {
-            $this->driver = new Credis_Cluster($server);
+            $this->driver = new \Credis_Cluster($server);
         }
         else {
 
             list($host, $port, $dsnDatabase, $user, $password, $options) = self::parseDsn($server);
             // $user is not used, only $password
 
-            // Look for known Credis_Client options
+            // Look for known \Credis_Client options
             $timeout = isset($options['timeout']) ? intval($options['timeout']) : null;
             $persistent = isset($options['persistent']) ? $options['persistent'] : '';
 
-            $this->driver = new Credis_Client($host, $port, $timeout, $persistent);
+            $this->driver = new \Credis_Client($host, $port, $timeout, $persistent);
             if ($password){
                 $this->driver->auth($password);
             }
@@ -227,7 +228,7 @@ class Resque_Redis
         try {
             return $this->driver->__call($name, $args);
         }
-        catch (CredisException $e) {
+        catch (\CredisException $e) {
             return false;
         }
     }
