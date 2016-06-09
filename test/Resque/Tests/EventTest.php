@@ -2,6 +2,7 @@
 use Resque\Resque;
 use Resque\Event;
 use Resque\Job;
+use Resque\Log;
 /**
  * Event tests.
  *
@@ -19,7 +20,7 @@ class Resque_Tests_EventTest extends Resque_Tests_TestCase
 
         // Register a worker to test with
         $this->worker = new Resque_Worker('jobs');
-        $this->worker->setLogger(new Resque_Log());
+        $this->worker->setLogger(new Log());
         $this->worker->registerWorker();
     }
 

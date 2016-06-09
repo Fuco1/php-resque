@@ -2,6 +2,7 @@
 use Resque\Resque;
 use Resque\Event;
 use Resque\Job;
+use Resque\Log;
 /**
  * Resque worker that handles checking queues for jobs, fetching them
  * off the queues, running them and handling the result.
@@ -65,7 +66,7 @@ class Resque_Worker
      */
     public function __construct($queues)
     {
-        $this->logger = new Resque_Log();
+        $this->logger = new Log();
 
         if(!is_array($queues)) {
             $queues = array($queues);

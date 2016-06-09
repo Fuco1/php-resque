@@ -1,6 +1,7 @@
 <?php
 use Resque\Resque;
 use Resque\Job;
+use Resque\Log;
 /**
  * Resque_Job_Status tests.
  *
@@ -21,7 +22,7 @@ class Resque_Tests_JobStatusTest extends Resque_Tests_TestCase
 
         // Register a worker to test with
         $this->worker = new Resque_Worker('jobs');
-        $this->worker->setLogger(new Resque_Log());
+        $this->worker->setLogger(new Log());
     }
 
     public function testJobStatusCanBeTracked()
